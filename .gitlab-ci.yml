@@ -1,0 +1,26 @@
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  tags:
+    - build
+  script:
+    - mkdir -p build
+    - cp installWeb.sh build/InstallWeb.sh
+    - cd build
+    - echo 'echo "Hello GitLab"' >> InstallWeb.sh
+    - echo 'apt install apache2 -y' >> InstallWeb.sh
+    - cat InstallWeb.sh
+  artifacts:
+    paths:
+      - build/
+
+testing:
+  stage: test
+  tags:
+    - test
+  script:
+    - sudo bash build/InstallWeb.sh
+    - sudo cp index.html /var/www/html/index.html
